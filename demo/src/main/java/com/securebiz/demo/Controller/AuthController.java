@@ -1,5 +1,6 @@
 package com.securebiz.demo.Controller;
 
+import com.securebiz.demo.security.JwtService;
 import com.securebiz.demo.Entity.Role;
 import com.securebiz.demo.Entity.User;
 import com.securebiz.demo.Repository.RoleRepository;
@@ -17,16 +18,19 @@ import java.util.Set;
 @RequestMapping("/auth")
 public class AuthController {
 
+    private final JwtService jwtService;
+
     private final UserService userService;
     private final RoleRepository roleRepository;
     private final AuthenticationManager authenticationManager;
 
     public AuthController(UserService userService,
                           RoleRepository roleRepository,
-                          AuthenticationManager authenticationManager) {
+                          AuthenticationManager authenticationManager, JwtService jwtService) {
         this.userService = userService;
         this.roleRepository = roleRepository;
         this.authenticationManager = authenticationManager;
+        this.jwtService = jwtService;
     }
 
     @PostMapping("/register")
@@ -60,6 +64,6 @@ public class AuthController {
                 )
         );
 
-        return "Login successful";
+        return jwtService.generateToken(request.getUsername());
     }
 }
