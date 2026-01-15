@@ -1,5 +1,7 @@
 package com.securebiz.demo.security;
 
+import com.securebiz.demo.Entity.Role;
+
 import com.securebiz.demo.Entity.User;
 import com.securebiz.demo.Repository.UserRepository;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -25,17 +27,16 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .orElseThrow(() ->
                         new UsernameNotFoundException("User not found"));
 
-        return new org.springframework.security.core.userdetails.User(
-                user.getUsername(),
-                user.getPassword(),
-                user.isEnabled(),
-                true,
-                true,
-                true,
-                user.getRoles().stream()
-                        .map(role ->
-                                new SimpleGrantedAuthority(role.getName()))
-                        .collect(Collectors.toSet())
-        );
+        return org.springframework.security.core.userdetails.User
+                .withUsername(user.getUsername())
+                .password(user.getPassword()) // MUST BE ENCODED
+                .authorities(
+                        user.getRoles()
+                                .stream()
+                                .map(Role::getName)
+                                .toArray(String[]::new)
+                )
+                .build();
     }
+
 }

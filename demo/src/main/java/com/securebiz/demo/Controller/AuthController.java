@@ -8,6 +8,7 @@ import com.securebiz.demo.Service.UserService;
 import com.securebiz.demo.dto.LoginRequest;
 import com.securebiz.demo.dto.RegisterRequest;
 import com.securebiz.demo.dto.UserResponse;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
@@ -55,7 +56,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody LoginRequest request) {
+    public ResponseEntity<String> login(@RequestBody LoginRequest request) {
 
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -64,6 +65,8 @@ public class AuthController {
                 )
         );
 
-        return jwtService.generateToken(request.getUsername());
+        String token = jwtService.generateToken(request.getUsername());
+
+        return ResponseEntity.ok(token);
     }
 }

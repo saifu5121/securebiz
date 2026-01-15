@@ -14,13 +14,17 @@ public class UserService {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
-    public User saveUser(User user){
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setEnabled(true);
+//public User saveUser(User user){
+  //      user.setPassword(passwordEncoder.encode(user.getPassword()));
+    //    user.setEnabled(true);
+      //  return userRepository.save(user);
+    //}
+
+    public User createUser(User user) {
+        user.setPassword(
+                passwordEncoder.encode(user.getPassword())
+        );
         return userRepository.save(user);
-    }
-    public User createUser(User user){
-        return saveUser(user);
     }
 
 
