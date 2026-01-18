@@ -2,6 +2,7 @@ package com.securebiz.demo.Controller;
 
 import com.securebiz.demo.Service.UserService;
 import com.securebiz.demo.Entity.User;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,6 +18,7 @@ public class UserController {
         this.userService = userService;
 
     }
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public User createUser(@RequestBody User user){
         return userService.createUser(user);
