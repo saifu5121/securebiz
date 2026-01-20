@@ -21,7 +21,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                          CustomUserDetailsService userDetailsService) {
         this.jwtService = jwtService;
         this.userDetailsService = userDetailsService;
+        
     }
+
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -49,7 +51,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             UserDetails userDetails =
                     userDetailsService.loadUserByUsername(username);
 
-            if (jwtService.validateToken(token)) {
+            if (jwtService.validateToken(token, userDetails)) {
 
                 UsernamePasswordAuthenticationToken authToken =
                         new UsernamePasswordAuthenticationToken(
